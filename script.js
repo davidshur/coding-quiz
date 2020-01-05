@@ -2,6 +2,7 @@ $(document).ready(() => {
   const timer = $('#timer');
   const title = $('.card-title');
   const content = $('.card-text');
+  const confirmation = $('#confirmation');
   const startButton = $('#start-button');
 
   $('#start-button').on('click', () => {
@@ -28,8 +29,11 @@ $(document).ready(() => {
     $('.choice-button').on('click', event => {
       let userChoice = $(event.target).data('choice');
       let answer = questions[currentQuestion].answer;
-      if (userChoice === answer) {
 
+      if (userChoice === answer) {
+        confirmation.text('Correct!');
+      } else {
+        confirmation.text('Incorrect...');
       }
     });
   });
