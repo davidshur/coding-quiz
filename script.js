@@ -1,85 +1,84 @@
 $(document).ready(() => {
-  const cardTitle = $('.card-title');
-  const choices = $('#choices');
   const confirmation = $('#confirmation');
   const content = $('.card-text');
-  const startButton = $('#start');
   const timer = $('#timer');
+  const title = $('.card-title');
 
-  startButton.on('click', () => {
-    let currentQuestion = 0;
-    let userScore = 0;
-    timeLeft = questions.length * 15;
+  $('#start').on('click', function() {
+    let q = 0;
+    let timeLeft = questions.length * 15;
+    let userScore;
+
     timer.text('Timer: ' + timeLeft);
 
     const runTimer = setInterval(() => {
-        if (userScore !== 0 || timeLeft <= 0) {
-          clearInterval(runTimer);
-          timer.text('Timer: 0');
-          makeScorePage();
-        } else {
-          timeLeft--;
-          timer.text('Timer: ' + timeLeft);
-        }
-      }, 1000);
+      if (timeLeft <= 0) {
+        clearInterval(runTimer);
+        timer.text('Timer: 0');
+        userScore = 0;
+        createScorePage();
+      } else {
+        timeLeft--;
+        timer.text('Timer: ' + timeLeft);
+      }
+    }, 1000);
 
-    const clearStartPage = () => {
-      startButton.remove();
-      content.text('');
-    }
+    $('#start').remove();
+    content.text('');
 
-    const fillQuestion = () => {
-      choices.empty();
-      cardTitle.text(questions[currentQuestion].title);
-      for (let i = 0; i < questions[currentQuestion].choices.length; i++) {
+    const createQuestionPage = () => {
+      $('#choices').empty();
+      title.text(questions[q].title);
+      for (let i = 0; i < questions[q].choices.length; i++) {
         const choice = $('<button>');
         choice.addClass('btn btn-primary btn-block choice-button');
-        choice.attr('data-choice', questions[currentQuestion].choices[i]);
-        choice.text(questions[currentQuestion].choices[i]);
-        choices.append(choice);
+        choice.attr('data-choice', questions[q].choices[i]);
+        choice.text(questions[q].choices[i]);
+        $('#choices').append(choice);
       }
 
-      checkAnswer();
-    }
+      $('.choice-button').on('click', function() {
+        const answer = questions[q].answer;
+        const userChoice = $(this).attr('data-choice');
 
-    const checkAnswer = () => {
-      $('.choice-button').on('click', event => {
-        const userChoice = $(event.target).data('choice');
-        const answer = questions[currentQuestion].answer;
-
-        if (userChoice === answer) {
-          confirmation.text('Correct!');
-        } else {
-          timeLeft -= 15;
-          confirmation.text('Incorrect...');
-        }
-
-        setTimeout(() => {
+        const clearConfirmation = setTimeout(() => {
           confirmation.empty();
         }, 1000);
 
-        if (currentQuestion >= questions.length - 1) {
+        if (userChoice === answer) {
+          confirmation.text('Correct!');
+          clearConfirmation;
+        } else {
+          timeLeft -= 15;
+          confirmation.text('Incorrect...');
+          clearConfirmation;
+        }
+
+        if (q >= questions.length - 1) {
+          clearInterval(runTimer);
           if (timeLeft <= 0) {
             userScore = 0;
           } else {
             userScore = timeLeft;
           }
+          createScorePage();
         } else {
-          currentQuestion++;
-          fillQuestion();
+          q++;
+          createQuestionPage();
         }
       });
     }
 
-    const makeScorePage = () => {
+    const createScorePage = () => {
       const scoreForm = $('<form>');
       const formGroup = $('<div>');
       const inputLabel = $('<label>');
       const userInput = $('<input>');
       const submitButton = $('<button>');
 
-      choices.empty();
-      cardTitle.text('The quiz is over!');
+      timer.text('Timer: 0');
+      $('#choices').empty();
+      title.text('The quiz is over!');
       content.text('You scored ' + userScore + ' points! I knew you had it in ya.');
 
       inputLabel.text('Enter your initials: ');
@@ -100,7 +99,6 @@ $(document).ready(() => {
       content.append(scoreForm);
 
       $('#submit').on('click', event => {
-        event.preventDefault();
         const initials = $('#user-initials').val();
         localStorage.setItem(initials, userScore);
         console.log(localStorage);
@@ -108,7 +106,6 @@ $(document).ready(() => {
     }
 
     runTimer;
-    clearStartPage();
-    fillQuestion();
+    createQuestionPage();
   });
 });

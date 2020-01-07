@@ -4,7 +4,7 @@ $(document).ready(() => {
 
   for (let i = 0; i < highscoreList.length; i++) {
     const userItem = $('<li>');
-    userItem.text(highscoreList[i] + ' | ' + localStorage.getItem(highscoreList[i]));
+    userItem.text(highscoreList[i] + ' ------- ' + localStorage.getItem(highscoreList[i]));
     scoreList.append(userItem);
   }
 
