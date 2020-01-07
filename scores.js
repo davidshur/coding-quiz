@@ -7,4 +7,9 @@ $(document).ready(() => {
     userItem.text(highscoreList[i] + ' | ' + localStorage.getItem(highscoreList[i]));
     scoreList.append(userItem);
   }
+
+  $('#reset').on('click', () => {
+    localStorage.clear();
+    location.reload();
+  });
 });

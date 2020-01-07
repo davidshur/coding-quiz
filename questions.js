@@ -10,8 +10,8 @@ const questions = [
     answer: "parentheses"
   },
   {
-    title: "Commonly used data types DO NOT include:",
-    choices: ["strings", "booleans", "alerts", "numbers"],
-    answer: "alerts"
+    title: 'Data in an object is collected within ____ pairs.',
+    choices: ['key: value', 'inner: outer', 'inverse: proper', 'name: value'],
+    answer: 'key: value'
   },
 ];
