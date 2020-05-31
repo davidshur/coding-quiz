@@ -1,4 +1,4 @@
-# Homework 3 - Coding Quiz
+# Coding Quiz
 
 This is a quiz that you can take in order to test your programming knowledge.
 
